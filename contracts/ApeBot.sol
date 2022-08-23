@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: UNLICENSED
+
 /**
  * Submitted for verification at Etherscan.io on 2021-05-01
  * https://etherscan.io/address/0x666f80a198412bcb987c430831b57ad61facb666
@@ -19,6 +21,7 @@ contract ApeBot is DyDxFlashLoanHelper, IAlphaLeakConstants {
     string  public constant name = "https://twitter.com/mevalphaleak";
 
     fallback() external payable {}
+    receive() external payable {}
 
     function callFunction(
         address,
@@ -247,6 +250,7 @@ contract ApeBot is DyDxFlashLoanHelper, IAlphaLeakConstants {
 
 
         ethProfitDelta = int256(address(this).balance) - balanceDeltas[0];
+
         if ((actionFlags & (FLAG_WETH_ACCOUNTING | FLAG_USDC_ACCOUNTING | FLAG_DAI_ACCOUNTING)) > 0) {
             if ((actionFlags & FLAG_WETH_ACCOUNTING) > 0) {
                 ethProfitDelta += int256(IERC20Token(TOKEN_WETH).balanceOf(address(this))) - balanceDeltas[1];
@@ -258,7 +262,6 @@ contract ApeBot is DyDxFlashLoanHelper, IAlphaLeakConstants {
                 ethProfitDelta += (int256(IERC20Token(TOKEN_DAI).balanceOf(address(this))) - balanceDeltas[3]) * IChainlinkAggregator(ORACLE_DAI).latestAnswer() / (1 ether);
             }
         }
-
 
         if ((actionFlags & FLAG_PAY_COINBASE_AMOUNT) > 0) {
             uint selfbalance = address(this).balance;
